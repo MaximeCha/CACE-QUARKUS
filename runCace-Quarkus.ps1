@@ -1,0 +1,1 @@
+java -jar .\cace-quarkus\target\quarkus-app\quarkus-run.jar
