@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+
 import org.bson.Document;
 import org.jboss.logging.Logger;
 
@@ -27,12 +28,7 @@ public class ComposantRepository {
 
 	public void save(Composant composant) {
 		LOG.info("On rentre dans le save");
-		Document document = new Document().append("id", composant.getId())
-				.append("composantNom", composant.getComposantNom())
-				.append("composantType", composant.getComposantType())
-				.append("prix", composant.getPrixValeur())
-				.append("prixType", composant.getPrixType());
-		getCollection().insertOne(document);
+		getCollection().insertOne(composantToDoc(composant));
 		LOG.info("On sort du save");
 	}
 
@@ -46,9 +42,10 @@ public class ComposantRepository {
 				Document document = cursor.next();
 				Composant composant = new Composant();
 				composant.setComposantNom(document.getString("composantType"));
-				composant.setComposantType((ComposantType) document.get("composantType"));
+				composant.setComposantType(
+						ComposantType.create(((String) document.get("composantType"))));
 				composant.setPrixValeur((Float) document.get("prix"));
-				composant.setPrixType((PrixType) document.get("prixType"));
+				composant.setPrixType(PrixType.create(((String) document.get("prixType"))));
 				composant.setId(document.getString("id"));
 				list.add(composant);
 			}
@@ -75,6 +72,15 @@ public class ComposantRepository {
 	public void delete(Composant composant) {
 		// TODO Auto-generated method stub
 
+	}
+
+	private Document composantToDoc(Composant composant) {
+		Document document = new Document().append("id", composant.getId())
+				.append("composantNom", composant.getComposantNom())
+				.append("composantType", ComposantType.valueOf(composant.getComposantType().toString().toUpperCase()))
+				.append("prix", composant.getPrixValeur())
+				.append("prixType", PrixType.valueOf(composant.getComposantType().toString().toUpperCase()));
+		return document;
 	}
 
 }

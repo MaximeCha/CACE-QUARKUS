@@ -1,12 +1,18 @@
 package cace.domain.entity;
 
 
+import java.io.Serializable;
+
 import cace.domain.dictionnaires.ComposantType;
 import cace.domain.dictionnaires.PrixType;
 
-public class Composant {
 
+public class Composant implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String id;
 	private String composantNom;
 	private ComposantType composantType;

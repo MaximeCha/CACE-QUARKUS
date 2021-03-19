@@ -1,11 +1,7 @@
 package cace.infrastructure.configuration;
 
-import java.util.List;
-
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -14,6 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.jboss.logging.Logger;
 
@@ -23,7 +20,7 @@ import cace.domain.service.ComposantService;
 
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-@Path("")
+@Path("/")
 @RequestScoped
 public class ComposantServiceRest {
 
@@ -33,31 +30,30 @@ public class ComposantServiceRest {
 	private static final Logger LOG = Logger.getLogger(ComposantServiceRest.class);
 
     @GET
-	@Path("/composantCaracteristiquesEconomiques")
-	public List<Composant> getComposant() {
+	@Path("composantCaracteristiquesEconomiques")
+	public Response getComposant() {
     	LOG.info("Get Composant Caracteristiques Economiques");
-		return composantCaracteristiquesEconomiquesService.findAll();
+		return Response.status(200).entity(composantCaracteristiquesEconomiquesService.findAll()).build();
 	}
 
     @GET
-	@Path("/composantCaracteristiquesEconomiques/{id}")
-	public Composant getComposantById(@PathParam("id") String id) {
+	@Path("composantCaracteristiquesEconomiques/{id}")
+	public Response getComposantById(@PathParam("id") String id) {
     	LOG.info("Get Composant by Id Caracteristiques Economiques");
-		return composantCaracteristiquesEconomiquesService.findByIdComposant(id);
+		return Response.status(200).entity(composantCaracteristiquesEconomiquesService.findByIdComposant(id)).build();
 	}
 
     @POST
-    @Produces(MediaType.TEXT_PLAIN)
-	@Path("/createComposantCaracteristiquesEconomiques")
-	public String createComposant(@Valid Composant composant) {
+	@Path("createComposantCaracteristiquesEconomiques")
+	public Response createComposant(Composant composant) {
     	LOG.info("Create Composant by Id Caracteristiques Economiques");
 		composantCaracteristiquesEconomiquesService.createComposant(composant);
-		return "Composant enregistre";
+		return Response.status(200).entity(composant).build();
 	}
 
     @DELETE
-	@Path("/deleteComposantCaracteristiquesEconomiques")
-	public void deleteComposant(@Valid Composant composant) {
+	@Path("deleteComposantCaracteristiquesEconomiques")
+	public void deleteComposant(Composant composant) {
     	LOG.info("Delete Composant Caracteristiques Economiques");
 		composantCaracteristiquesEconomiquesService.deleteComposant(composant);
 	}
